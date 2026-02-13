@@ -1,9 +1,36 @@
 //var decloration
-let mineSilicon = document.getElementById("mineSilicon");
-let siliconCount = document.getElementById("siliconCount");
-let siliconPerSec = document.getElementById("siliconPerSec");
-let autoMiners = 1;
-let clickPower = 1;
+let siliconCountElement = document.getElementById("siliconCount");
+let siliconPerSecElement = document.getElementById("siliconPerSec");
+let mineSiliconElement = document.getElementById("mineSilicon");
+//auto miner
+let buyAutoMinerElement = document.getElementById("buyAutoMiner");
+let autoMinerPriceElement = document.getElementById("autoMinerPrice");
+let autoMinerCountElement = document.getElementById("autoMinerCount");
+//silicon harvester
+let buySiliconHarvesterElement = document.getElementById("buySiliconHarvester");
+let siliconHarvesterPriceElement = document.getElementById("siliconHarvesterPrice");
+let siliconHarvesterCountElement = document.getElementById("siliconHarvesterCount");
+
+const buildings = {
+    autoMiner: {
+        owned: 0,
+        baseCost: 15,
+        costScale: 1.15,
+        production: {silicon: 1}
+    },
+    siliconHarvester: {
+        owned: 0,
+        baseCost: 100,
+        costScale: 1.15,
+        production: {silicon: 5}
+    }
+}
+
+const ui = {
+    autoMiner: {countEl: autoMinerCountElement.textContent, priceEl: autoMinerPriceElement.textContent},
+    siliconHarvester: {countEl: siliconCountElement.textContent, priceEl: siliconHarvesterPriceElement.textContent}
+}
+
 let resources = {
     silicon: 0,
     wafers: 0,
@@ -11,26 +38,65 @@ let resources = {
     money: 0
 }
 
-siliconPerSec.textContent = autoMiners
+let clickPower = 1;
 
+//functions
 function giveSilicon(amount) {
     resources.silicon += amount;
-    siliconCount.textContent = resources.silicon;
 }
 
-mineSilicon.addEventListener("click", function() {
+function getSiliconPerSecond() {
+    let total = 0;
+    for (let key in buildings) {
+        let building = buildings[key];
+        total += building.owned * (building.production?.silicon || 0);
+    }
+    return total;
+}
+
+function getBuildingCost(key) {
+    return Math.round(buildings[key].baseCost * (buildings[key].costScale**buildings[key].owned));
+}
+
+function buyBuilding(key) {
+    let buildingCost = getBuildingCost(key);
+    if (resources.silicon >= buildingCost) {
+        resources.silicon -= buildingCost;
+        buildings[key].owned++;
+    }
+}
+
+function buildingtick() {
+    giveSilicon(getSiliconPerSecond());
+}
+
+function guiTick() {
+    siliconCountElement.textContent = Math.floor(resources.silicon);
+    siliconPerSecElement.textContent = getSiliconPerSecond();
+    autoMinerPriceElement.textContent = getBuildingCost("autoMiner");
+    autoMinerCountElement.textContent = buildings.autoMiner.owned;
+    siliconHarvesterPriceElement.textContent = getBuildingCost("siliconHarvester");
+    siliconHarvesterCountElement.textContent = buildings.siliconHarvester.owned;
+
+    for (let key in ui) {
+        ui[key].countEl = buildings[key].owned;
+        ui[key].priceEl = getBuildingCost(key);
+    }
+}
+
+//butons
+mineSiliconElement.addEventListener("click", function() {
     giveSilicon(clickPower);
 })
 
-function tick() {
-    giveSilicon(autoMiners);
-    console.log("ticked");
-}
+buyAutoMinerElement.addEventListener("click", function() {
+    buyBuilding("autoMiner");
+})
 
-setInterval(tick, 1000)
+buySiliconHarvesterElement.addEventListener("click", function() {
+    buyBuilding("siliconHarvester");
+})
 
-/*testing
-console.log(resources.silicon);
-giveSilicon(1);
-console.log(resources.silicon);
-*/
+//tick/sec
+setInterval(buildingtick, 1000);
+setInterval(guiTick, 100);
