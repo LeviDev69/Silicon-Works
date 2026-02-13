@@ -73,10 +73,6 @@ function buildingtick() {
 function guiTick() {
     siliconCountElement.textContent = Math.floor(resources.silicon);
     siliconPerSecElement.textContent = getSiliconPerSecond();
-    autoMinerPriceElement.textContent = getBuildingCost("autoMiner");
-    autoMinerCountElement.textContent = buildings.autoMiner.owned;
-    siliconHarvesterPriceElement.textContent = getBuildingCost("siliconHarvester");
-    siliconHarvesterCountElement.textContent = buildings.siliconHarvester.owned;
 
     for (let key in ui) {
         ui[key].countEl = buildings[key].owned;
