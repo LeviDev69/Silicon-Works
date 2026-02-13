@@ -97,6 +97,34 @@ buySiliconHarvesterElement.addEventListener("click", function() {
     buyBuilding("siliconHarvester");
 })
 
+//saving
+const SAVE_KEY = "siliconWorksSave_v1"
+
+function saveGame() {
+    const saveData = {
+        resources,
+        buildings
+    }
+    localStorage.setItem(SAVE_KEY, JSON.stringify(saveData));
+}
+function loadGame() {
+    const raw = localStorage.getItem(SAVE_KEY);
+    if (!raw) return;
+    const data = JSON.parse(raw);
+    if (data.resources) resources = data.resources;
+    if (data.buildings) {
+        for (const key in buildings) {
+            if (data.buildings[key]) {
+                buildings[key].owned = data.buildings[key].owned ?? buildings[key].owned;
+            }
+        }
+    }
+}
+
+loadGame();
+guiTick();
+
 //tick/sec
+setInterval(saveGame, 5000);
 setInterval(buildingtick, 1000);
 setInterval(guiTick, 100);
