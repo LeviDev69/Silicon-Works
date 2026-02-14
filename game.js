@@ -4,6 +4,7 @@ let siliconPerSecElement = document.getElementById("siliconPerSec");
 let mineSiliconElement = document.getElementById("mineSilicon");
 let wafersCountElement = document.getElementById("wafersCount");
 let chipsCountElement = document.getElementById("chipCount");
+let transistorCountElement = document.getElementById("transistorCount");
 let moneyCountElement = document.getElementById("moneyCount");
 //selling
 let sellOneSiliconElement = document.getElementById("sellOneSilicon");
@@ -18,6 +19,7 @@ let sellOneHundredChipElement = document.getElementById("sellOneHundredChip");
 //crafting
 let craftWaferElement = document.getElementById("craftWafer");
 let craftChipElement = document.getElementById("craftChip");
+let craftTransistorsElement = document.getElementById("craftTransistors");
 //auto miner
 let buyAutoMinerElement = document.getElementById("buyAutoMiner");
 let autoMinerPriceElement = document.getElementById("autoMinerPrice");
@@ -43,6 +45,11 @@ const recipes = {
         name: "Chip",
         input: {wafers: 5},
         output: {chips: 1}
+    },
+    transistor: {
+        name: "Transistor",
+        input: {chips: 5, silicon: 10},
+        output: {transistors: 1}
     }
 }
 
@@ -70,6 +77,7 @@ const resourceUi = {
     silicon: {countEl: siliconCountElement},
     wafers: {countEl: wafersCountElement},
     chips: {countEl: chipsCountElement},
+    transistors: {countEl: transistorCountElement},
     money: {countEl: moneyCountElement}
 }
 
@@ -77,6 +85,7 @@ let resources = {
     silicon: 0,
     wafers: 0,
     chips: 0,
+    transistors: 0,
     money: 0
 }
 
@@ -178,40 +187,43 @@ craftChipElement.addEventListener("click", function() {
     craft("chip");
 })
 
+craftTransistorsElement.addEventListener("click", function() {
+    craft("transistor");
+})
+
 sellOneSiliconElement.addEventListener("click", function() {
-    sell("silicon", 1)
+    sell("silicon", 1);
 })
 
 sellTenSiliconElement.addEventListener("click", function() {
-    sell("silicon", 10)
+    sell("silicon", 10);
 })
 
 sellOneHundredSiliconElement.addEventListener("click", function() {
-    sell("silicon", 100)
+    sell("silicon", 100);
 })
 
 sellOneWaferElement.addEventListener("click", function() {
-    sell("wafers", 1)
+    sell("wafers", 1);
 })
-
 sellTenWaferElement.addEventListener("click", function() {
-    sell("wafers", 10)
+    sell("wafers", 10);
 })
 
 sellOneHundredWaferElement.addEventListener("click", function() {
-    sell("wafers", 100)
+    sell("wafers", 100);
 })
 
 sellOneChipElement.addEventListener("click", function() {
-    sell("chips", 1)
+    sell("chips", 1);
 })
 
 sellTenChipElement.addEventListener("click", function() {
-    sell("chips", 10)
+    sell("chips", 10);
 })
 
 sellOneHundredChipElement.addEventListener("click", function() {
-    sell("chips", 100)
+    sell("chips", 100);
 })
 
 
@@ -246,3 +258,23 @@ guiTick();
 setInterval(saveGame, 5000);
 setInterval(buildingtick, 1000);
 setInterval(guiTick, 100);
+
+//dev commands:
+function resetInventory() {
+    for (let key in resources) {
+        resources[key] = 0;
+    }
+}
+
+function resetBuildings() {
+    for (let key in buildings) {
+        buildings[key].owned = 0;
+    }
+}
+
+function reset() {
+    resetInventory();
+    resetBuildings();
+    guiTick();
+    saveGame();
+}
