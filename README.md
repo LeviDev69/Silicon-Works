@@ -1,1 +1,2 @@
 # Silicon-Works
+Hello! I am LeviDev69, I am creating this project because of a bit shorter than a 2 week break in my schedule and I want to learn more web design skills, so I decided to make Silicon Works! The game is still in it's infancy though, so stay tuned!
