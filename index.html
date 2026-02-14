@@ -2,42 +2,53 @@
 <html>
 <head>
     <title>Silicon Works</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <h1>Silicon Works</h1>
     
     <div>
     <h2>Inventory</h2>
-    <p>Silicon: <span id="siliconCount">0</span>    Wafers: <span id="wafersCount">0</span>    Chips: <span id="chipCount">0</span>    Transistors: <span id="transistorCount">0</span>    Money: <span id="moneyCount">0</span></p>
-    <p>Silicon/sec: <span id="siliconPerSec">0</span>   Wafers/sec: <span id="wafersPerSec">0</span>    Chips/sec: <span id="chipsPerSec">0</span>  Transistors/sec: <span id="transistorsPerSec">0</span></p>
+    <p>Silicon: <span id="siliconCount">0</span> <br> Wafers: <span id="wafersCount">0</span>  <br>  Chips: <span id="chipCount">0</span>  <br>  Transistors: <span id="transistorCount">0</span> <br>   Money: <span id="moneyCount">0</span></p>
+    <p>Silicon/sec: <span id="siliconPerSec">0</span>  <br> Wafers/sec: <span id="wafersPerSec">0</span>  <br>  Chips/sec: <span id="chipsPerSec">0</span> <br> Transistors/sec: <span id="transistorsPerSec">0</span></p>
     <button id="mineSilicon">Mine Silicon</button>
     </div>
 
     <div>
         <h2>Shop</h2>
+
+        <div class="modeToggle">
+            <span>Buy</span>
+            <label class="buySellSlider">
+                <input type="checkbox" id="buyModeToggle">
+                <span class="buyModeSlider"></span>
+            </label>
+            <span>Sell</span>
+        </div>
+
         <div>
             <p>Silicon Miners</p>
             <button id="buyAutoMiner">
-                Buy auto miner [$<span id="autoMinerPrice">10</span>] have:<span id="autoMinerCount">0</span> (creates 1 silicon/sec)
+                <span class="sellModeText">buy</span> auto miner [$<span id="autoMinerPrice">10</span>] have:<span id="autoMinerCount">0</span> (creates 1 silicon/sec)
             </button>
             <button id="buySiliconHarvester">
-                Buy Silicon Harvester [$<span id="siliconHarvesterPrice">100</span>] have:<span id="siliconHarvesterCount">0</span> (creates 5 silicon/sec)
+                <span class="sellModeText">buy</span> Silicon Harvester [$<span id="siliconHarvesterPrice">100</span>] have:<span id="siliconHarvesterCount">0</span> (creates 5 silicon/sec)
             </button>
         </div>
             <p>Wafers Crafters</p>
             <button id="buyWafersFabricator">
-                Buy Wafer Fabricator [$<span id="wafersFabricatorPrice">600</span>] have:<span id="wafersFabricatorCount">0</span>  (uses 15 silicon/sec to create 1 wafer/sec)
+                <span class="sellModeText">buy</span> Wafer Fabricator [$<span id="wafersFabricatorPrice">600</span>] have:<span id="wafersFabricatorCount">0</span>  (uses 15 silicon/sec to create 1 wafer/sec)
             </button>
         <div>
             <p>Chips Crafters</p>
             <button id="buyChipsAssembler">
-                Buy Chip Assembler [$<span id="chipsAssemblerPrice">1500</span>] have:<span id="chipsAssemblerCount">0</span> (uses 5 wafers/sec to create 1 chips/sec)
+                <span class="sellModeText">buy</span> Chip Assembler [$<span id="chipsAssemblerPrice">1500</span>] have:<span id="chipsAssemblerCount">0</span> (uses 5 wafers/sec to create 1 chips/sec)
             </button>
         </div>
         <div>
             <p>Transistor Crafters</p>
             <button id="buyTransistorsAssembler">
-                Buy Transistor Fabricator [$<span id="transistorsAssemblerPrice">20000</span>] have:<span id="transistorsAssemblerCount">0</span> (uses 5 chips/sec and 10 silicon/sec to create 1 transistor/sec)
+                <span class="sellModeText">buy</span> Transistor Fabricator [$<span id="transistorsAssemblerPrice">20000</span>] have:<span id="transistorsAssemblerCount">0</span> (uses 5 chips/sec and 10 silicon/sec to create 1 transistor/sec)
             </button>
         </div>
 

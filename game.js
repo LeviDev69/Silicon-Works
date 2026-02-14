@@ -9,6 +9,8 @@ let chipsPerSecElement = document.getElementById("chipsPerSec");
 let transistorCountElement = document.getElementById("transistorCount");
 let transistorsPerSecElement = document.getElementById("transistorsPerSec");
 let moneyCountElement = document.getElementById("moneyCount");
+let sellModeToggleElement = document.getElementById("buyModeToggle");
+let sellModeTextClass = document.querySelectorAll(".sellModeText");
 //selling
 let sellOneSiliconElement = document.getElementById("sellOneSilicon");
 let sellTenSiliconElement = document.getElementById("sellTenSilicon");
@@ -129,6 +131,7 @@ let resources = {
     money: 0
 }
 
+let sellMode = false;
 let lastDelta = resourcePerSecondCalc();
 let clickPower = 1;
 
@@ -165,23 +168,48 @@ function getBuildingCost(key) {
     return Math.round(buildings[key].baseCost * (buildings[key].costScale**buildings[key].owned));
 }
 
+function getBuildingSellPrice(key) {
+    if ((buildings[key].owned || 0) > 0) {
+        return Math.floor(buildings[key].baseCost * (buildings[key].costScale ** (buildings[key].owned -1)));
+    } else return 0;
+    
+}
+
 function buyBuilding(key) {
-    let buildingCost = getBuildingCost(key);
-    if (resources.money >= buildingCost) {
-        resources.money -= buildingCost;
-        buildings[key].owned++;
+    if (key in buildings) {
+        let buildingCost = getBuildingCost(key);
+        if (resources.money >= buildingCost) {
+            resources.money -= buildingCost;
+            buildings[key].owned++;
+        }
+    }
+}
+
+function sellBuilding(key) {
+    let buildingPrice = getBuildingSellPrice(key);
+    if (buildingPrice !== 0) {
+        buildings[key].owned--;
+        resources.money += buildingPrice;
+    }
+}
+
+function buyButton(key) {
+    if (sellMode) {
+        sellBuilding(key);
+    } else {
+        buyBuilding(key);
     }
 }
 
 function buildingtick() {
     const delta = resourcePerSecondCalc();
 
-    for (let r in delta.input) {
-        resources[r] -= delta.input[r];
+    for (let resource in delta.input) {
+        resources[resource] = (resources[resource] || 0) - delta.input[resource];
     }
 
-    for (let r in delta.output) {
-        resources[r] = (resources[r] || 0) + delta.output[r];
+    for (let resource in delta.output) {
+        resources[resource] = (resources[resource] || 0) + delta.output[resource];
     }
 
     lastDelta = delta;
@@ -189,6 +217,12 @@ function buildingtick() {
 
 
 function guiTick() {
+    let sellModeText = (sellMode ? "Sell" : "Buy");
+
+    for (let element of sellModeTextClass) {
+        element.textContent = sellModeText;
+    }
+
     const delta = lastDelta;
     
     for (let key in resourceUi) {
@@ -200,11 +234,15 @@ function guiTick() {
 
     for (let key in buildingUi) {
         buildingUi[key].countEl.textContent = buildings[key].owned;
-        buildingUi[key].priceEl.textContent = getBuildingCost(key);
+        if (sellMode) {
+            buildingUi[key].priceEl.textContent = Math.floor(getBuildingCost(key) * 0.5)
+        } else {
+            buildingUi[key].priceEl.textContent = getBuildingCost(key);
+        }
     }
 }
 
-function sell(key, amount) {
+function sellResource(key, amount) {
     if ((resources[key] || 0) >= amount) {
         resources[key] -= amount;
         resources.money += (itemPrices[key]*amount);
@@ -277,22 +315,22 @@ mineSiliconElement.addEventListener("click", function() {
 })
 
 buyAutoMinerElement.addEventListener("click", function() {
-    buyBuilding("autoMiner");
+    buyButton("autoMiner");
 })
 
 buySiliconHarvesterElement.addEventListener("click", function() {
-    buyBuilding("siliconHarvester");
+    buyButton("siliconHarvester");
 })
 
 buyWafersFabricatorElement.addEventListener("click", function() {
-    buyBuilding("wafersFabricator");
+    buyButton("wafersFabricator");
 })
 buyChipsAssemblerElement.addEventListener("click", function() {
-    buyBuilding("chipsAssembler");
+    buyButton("chipsAssembler");
 })
 
 buyTransistorsAssemblerElement.addEventListener("click", function() {
-    buyBuilding("transistorsAssembler");
+    buyButton("transistorsAssembler");
 })
 
 craftWaferElement.addEventListener("click", function() {
@@ -308,52 +346,55 @@ craftTransistorsElement.addEventListener("click", function() {
 })
 
 sellOneSiliconElement.addEventListener("click", function() {
-    sell("silicon", 1);
+    sellResource("silicon", 1);
 })
 
 sellTenSiliconElement.addEventListener("click", function() {
-    sell("silicon", 10);
+    sellResource("silicon", 10);
 })
 
 sellOneHundredSiliconElement.addEventListener("click", function() {
-    sell("silicon", 100);
+    sellResource("silicon", 100);
 })
 
 sellOneWaferElement.addEventListener("click", function() {
-    sell("wafers", 1);
+    sellResource("wafers", 1);
 })
 sellTenWaferElement.addEventListener("click", function() {
-    sell("wafers", 10);
+    sellResource("wafers", 10);
 })
 
 sellOneHundredWaferElement.addEventListener("click", function() {
-    sell("wafers", 100);
+    sellResource("wafers", 100);
 })
 
 sellOneChipElement.addEventListener("click", function() {
-    sell("chips", 1);
+    sellResource("chips", 1);
 })
 
 sellTenChipElement.addEventListener("click", function() {
-    sell("chips", 10);
+    sellResource("chips", 10);
 })
 
 sellOneHundredChipElement.addEventListener("click", function() {
-    sell("chips", 100);
+    sellResource("chips", 100);
 })
 
 sellOneTransistorsElement.addEventListener("click", function() {
-    sell("transistors", 1);
+    sellResource("transistors", 1);
 })
 
 sellTenTransistorsElement.addEventListener("click", function() {
-    sell("transistors", 10);
+    sellResource("transistors", 10);
 })
 
 sellOneHundredTransistorsElement.addEventListener("click", function() {
-    sell("transistors", 100);
+    sellResource("transistors", 100);
 })
 
+sellModeToggleElement.addEventListener("change", function() {
+    sellMode = sellModeToggleElement.checked;
+});
 
 //saving
 const SAVE_KEY = "siliconWorksSave_v1"
