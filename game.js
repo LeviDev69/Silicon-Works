@@ -3,6 +3,7 @@ let siliconCountElement = document.getElementById("siliconCount");
 let siliconPerSecElement = document.getElementById("siliconPerSec");
 let mineSiliconElement = document.getElementById("mineSilicon");
 let wafersCountElement = document.getElementById("wafersCount");
+let wafersPerSecElement = document.getElementById("wafersPerSec");
 let chipsCountElement = document.getElementById("chipCount");
 let transistorCountElement = document.getElementById("transistorCount");
 let moneyCountElement = document.getElementById("moneyCount");
@@ -16,6 +17,9 @@ let sellOneHundredWaferElement = document.getElementById("sellOneHundredWafer");
 let sellOneChipElement = document.getElementById("sellOneChip");
 let sellTenChipElement = document.getElementById("sellTenChip");
 let sellOneHundredChipElement = document.getElementById("sellOneHundredChip");
+let sellOneTransistorsElement = document.getElementById("sellOneTransistors");
+let sellTenTransistorsElement = document.getElementById("sellTenTransistors");
+let sellOneHundredTransistorsElement = document.getElementById("sellOneHundredTransistors");
 //crafting
 let craftWaferElement = document.getElementById("craftWafer");
 let craftChipElement = document.getElementById("craftChip");
@@ -28,15 +32,20 @@ let autoMinerCountElement = document.getElementById("autoMinerCount");
 let buySiliconHarvesterElement = document.getElementById("buySiliconHarvester");
 let siliconHarvesterPriceElement = document.getElementById("siliconHarvesterPrice");
 let siliconHarvesterCountElement = document.getElementById("siliconHarvesterCount");
+//WafersFabricator
+let buyWafersFabricatorElement = document.getElementById("buyWafersFabricator");
+let wafersFabricatorPriceElement = document.getElementById("wafersFabricatorPrice");
+let wafersFabricatorCountElement = document.getElementById("wafersFabricatorCount");
 
 const itemPrices = {
     silicon: 1,
     wafers: 20,
-    chips: 150
+    chips: 150,
+    transistors: 1000
 }
 
 const recipes = {
-    wafer: {
+    wafers: {
         name: "Wafer",
         input: {silicon: 15},
         output: {wafers: 1}
@@ -46,7 +55,7 @@ const recipes = {
         input: {wafers: 5},
         output: {chips: 1}
     },
-    transistor: {
+    transistors: {
         name: "Transistor",
         input: {chips: 5, silicon: 10},
         output: {transistors: 1}
@@ -58,24 +67,31 @@ const buildings = {
         owned: 0,
         baseCost: 15,
         costScale: 1.15,
-        production: {silicon: 1}
+        production: {output: {silicon: 1}}
     },
     siliconHarvester: {
         owned: 0,
         baseCost: 100,
         costScale: 1.15,
-        production: {silicon: 5}
+        production: {output: {silicon: 5}}
+    },
+    wafersFabricator: {
+        owned: 0,
+        baseCost: 600,
+        costScale: 1.17,
+        production: {input: {silicon: 15}, output: {wafers: 1}}
     }
 }
 
 const buildingUi = {
     autoMiner: {countEl: autoMinerCountElement, priceEl: autoMinerPriceElement},
-    siliconHarvester: {countEl: siliconHarvesterCountElement, priceEl: siliconHarvesterPriceElement}
+    siliconHarvester: {countEl: siliconHarvesterCountElement, priceEl: siliconHarvesterPriceElement},
+    wafersFabricator: {countEl: wafersFabricatorCountElement, priceEl: wafersFabricatorPriceElement}
 }
 
 const resourceUi = {
-    silicon: {countEl: siliconCountElement},
-    wafers: {countEl: wafersCountElement},
+    silicon: {countEl: siliconCountElement, perSecEl: siliconPerSecElement},
+    wafers: {countEl: wafersCountElement, perSecEl: wafersPerSecElement},
     chips: {countEl: chipsCountElement},
     transistors: {countEl: transistorCountElement},
     money: {countEl: moneyCountElement}
@@ -89,6 +105,7 @@ let resources = {
     money: 0
 }
 
+let lastDelta = resourcePerSecondCalc();
 let clickPower = 1;
 
 //functions
@@ -96,14 +113,29 @@ function giveSilicon(amount) {
     resources.silicon += amount;
 }
 
+function giveWafers(amount) {
+    resources.wafers += amount;
+}
+
+function giveChips(amount) {
+    resources.chips += amount;
+}
+
+function giveTransistors(amount) {
+    resources.transistors += amount
+}
+
+/*
+legacy
 function getSiliconPerSecond() {
     let total = 0;
     for (let key in buildings) {
         let building = buildings[key];
-        total += building.owned * (building.production?.silicon || 0);
+        total += building.owned * (building.production?.output.silicon || 0);
     }
     return total;
 }
+*/
 
 function getBuildingCost(key) {
     return Math.round(buildings[key].baseCost * (buildings[key].costScale**buildings[key].owned));
@@ -118,14 +150,28 @@ function buyBuilding(key) {
 }
 
 function buildingtick() {
-    giveSilicon(getSiliconPerSecond());
+    const delta = resourcePerSecondCalc();
+
+    for (let r in delta.input) {
+        resources[r] -= delta.input[r];
+    }
+
+    for (let r in delta.output) {
+        resources[r] = (resources[r] || 0) + delta.output[r];
+    }
+
+    lastDelta = delta;
 }
 
+
 function guiTick() {
-    siliconPerSecElement.textContent = getSiliconPerSecond();
+    const delta = lastDelta;
     
     for (let key in resourceUi) {
         resourceUi[key].countEl.textContent = Math.floor(resources[key]);
+        if(resourceUi[key].perSecEl) {
+            resourceUi[key].perSecEl.textContent = (delta.output[key] || 0) - (delta.input[key] || 0);
+        }
     }
 
     for (let key in buildingUi) {
@@ -140,6 +186,41 @@ function sell(key, amount) {
         resources.money += (itemPrices[key]*amount);
     }
 }
+
+function resourcePerSecondCalc() {
+    let input = {};
+    let output = {};
+
+    for (let key in buildings) {
+        const b = buildings[key];
+        const prod = b.production;
+
+        const inMap = prod.input || {};
+        const outMap = prod.output || {};
+
+        let cycles = b.owned;
+
+        for (let r in inMap) {
+            const req = inMap[r];
+            const available = resources[r] || 0;
+            const possible = Math.floor(available / req);
+            cycles = Math.min(cycles, possible);
+        }
+
+        if (cycles <= 0) continue;
+
+        for (let r in inMap) {
+            input[r] = (input[r] || 0) + inMap[r] * cycles;
+        }
+
+        for (let r in outMap) {
+            output[r] = (output[r] || 0) + outMap[r] * cycles;
+        }
+    }
+
+    return { input, output };
+}
+
 
 //crafting
 function canCraft(recipeKey) {
@@ -158,7 +239,7 @@ function craft(recipeKey) {
     let recipe = recipes[recipeKey];
     if (canCraft(recipeKey)) {
         for (const resource in recipe.input) {
-            resources[resource] -= recipe.input[resource];
+            resources[resource] = (resources[resource] || 0) - recipe.input[resource];
         }
         for (const resource in recipe.output) {
             resources[resource] = (resources[resource] || 0) + recipe.output[resource];
@@ -179,8 +260,12 @@ buySiliconHarvesterElement.addEventListener("click", function() {
     buyBuilding("siliconHarvester");
 })
 
+buyWafersFabricatorElement.addEventListener("click", function() {
+    buyBuilding("wafersFabricator");
+})
+
 craftWaferElement.addEventListener("click", function() {
-    craft("wafer");
+    craft("wafers");
 })
 
 craftChipElement.addEventListener("click", function() {
@@ -188,7 +273,7 @@ craftChipElement.addEventListener("click", function() {
 })
 
 craftTransistorsElement.addEventListener("click", function() {
-    craft("transistor");
+    craft("transistors");
 })
 
 sellOneSiliconElement.addEventListener("click", function() {
@@ -226,6 +311,18 @@ sellOneHundredChipElement.addEventListener("click", function() {
     sell("chips", 100);
 })
 
+sellOneTransistorsElement.addEventListener("click", function() {
+    sell("transistors", 1);
+})
+
+sellTenTransistorsElement.addEventListener("click", function() {
+    sell("transistors", 10);
+})
+
+sellOneHundredTransistorsElement.addEventListener("click", function() {
+    sell("transistors", 100);
+})
+
 
 //saving
 const SAVE_KEY = "siliconWorksSave_v1"
@@ -241,7 +338,13 @@ function loadGame() {
     const raw = localStorage.getItem(SAVE_KEY);
     if (!raw) return;
     const data = JSON.parse(raw);
-    if (data.resources) resources = data.resources;
+    if (data.resources) {
+        for(const key in resources) {
+            if(key in data.resources) {
+                resources[key] = data.resources[key] ?? resources[key];
+            }
+        }
+    }
     if (data.buildings) {
         for (const key in buildings) {
             if (data.buildings[key]) {

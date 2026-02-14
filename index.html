@@ -9,17 +9,20 @@
     <div>
     <h2>Inventory</h2>
     <p>Silicon: <span id="siliconCount">0</span>    Wafers: <span id="wafersCount">0</span>    Chips: <span id="chipCount">0</span>    Transistors: <span id="transistorCount">0</span>    Money: <span id="moneyCount">0</span></p>
-    <p>Silicon/sec: <span id="siliconPerSec">0</span></p>
+    <p>Silicon/sec: <span id="siliconPerSec">0</span>   Wafers/sec: <span id="wafersPerSec">0</span></p>
     <button id="mineSilicon">Mine Silicon</button>
     </div>
 
     <div>
         <h2>Shop</h2>
         <button id="buyAutoMiner">
-            Buy auto miner ($<span id="autoMinerPrice">10</span>) have:<span id="autoMinerCount">0</span>
+            Buy auto miner [$<span id="autoMinerPrice">10</span>] have:<span id="autoMinerCount">0</span> (creates 1 silicon/sec)
         </button>
         <button id="buySiliconHarvester">
-            Buy Silicon Harvester ($<span id="siliconHarvesterPrice">100</span>) have:<span id="siliconHarvesterCount">0</span>
+            Buy Silicon Harvester [$<span id="siliconHarvesterPrice">100</span>] have:<span id="siliconHarvesterCount">0</span> (creates 5 silicon/sec)
+        </button>
+        <button id="buyWafersFabricator">
+            Buy Wafer Fabricator [$<span id="wafersFabricatorPrice">600</span>] have:<span id="wafersFabricatorCount">0</span>  (uses 15 silicon/sec to create 1 wafer/sec)
         </button>
     </div>
 
@@ -44,7 +47,14 @@
             <p>Chips</p>
             <button id="sellOneChip">sell 1 ($150)</button>
             <button id="sellTenChip">sell 10 ($1,500)</button>
-            <button id="sellOneHundredChip">sell 100 ($150,00)</button>
+            <button id="sellOneHundredChip">sell 100 ($15,00)</button>
+        </div>
+
+        <div>
+            <p>Transistors</p>
+            <button id="sellOneTransistors">sell 1 ($1,000)</button>
+            <button id="sellTenTransistors">sell 10 ($10,000)</button>
+            <button id="sellOneHundredTransistors">sell 100 ($100,00)</button>
         </div>
 
     </div>
