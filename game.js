@@ -5,7 +5,9 @@ let mineSiliconElement = document.getElementById("mineSilicon");
 let wafersCountElement = document.getElementById("wafersCount");
 let wafersPerSecElement = document.getElementById("wafersPerSec");
 let chipsCountElement = document.getElementById("chipCount");
+let chipsPerSecElement = document.getElementById("chipsPerSec");
 let transistorCountElement = document.getElementById("transistorCount");
+let transistorsPerSecElement = document.getElementById("transistorsPerSec");
 let moneyCountElement = document.getElementById("moneyCount");
 //selling
 let sellOneSiliconElement = document.getElementById("sellOneSilicon");
@@ -36,6 +38,14 @@ let siliconHarvesterCountElement = document.getElementById("siliconHarvesterCoun
 let buyWafersFabricatorElement = document.getElementById("buyWafersFabricator");
 let wafersFabricatorPriceElement = document.getElementById("wafersFabricatorPrice");
 let wafersFabricatorCountElement = document.getElementById("wafersFabricatorCount");
+//chipsAssembler
+let buyChipsAssemblerElement = document.getElementById("buyChipsAssembler");
+let chipsAssemblerPriceElement = document.getElementById("chipsAssemblerPrice");
+let chipsAssemblerCountElement = document.getElementById("chipsAssemblerCount");
+//transistorsAssembler
+let buyTransistorsAssemblerElement = document.getElementById("buyTransistorsAssembler");
+let transistorsAssemblerPriceElement = document.getElementById("transistorsAssemblerPrice");
+let transistorsAssemblerCountElement = document.getElementById("transistorsAssemblerCount");
 
 const itemPrices = {
     silicon: 1,
@@ -80,20 +90,34 @@ const buildings = {
         baseCost: 600,
         costScale: 1.17,
         production: {input: {silicon: 15}, output: {wafers: 1}}
+    },
+    chipsAssembler: {
+        owned: 0,
+        baseCost: 4000,
+        costScale: 1.17,
+        production: {input: {wafers: 5}, output: {chips: 1}}
+    },
+    transistorsAssembler: {
+        owned: 0,
+        baseCost: 20000,
+        costScale: 1.17,
+        production: {input: {chips: 5, silicon: 10}, output: {transistors: 1}}
     }
 }
 
 const buildingUi = {
     autoMiner: {countEl: autoMinerCountElement, priceEl: autoMinerPriceElement},
     siliconHarvester: {countEl: siliconHarvesterCountElement, priceEl: siliconHarvesterPriceElement},
-    wafersFabricator: {countEl: wafersFabricatorCountElement, priceEl: wafersFabricatorPriceElement}
+    wafersFabricator: {countEl: wafersFabricatorCountElement, priceEl: wafersFabricatorPriceElement},
+    chipsAssembler: {countEl: chipsAssemblerCountElement, priceEl: chipsAssemblerPriceElement},
+    transistorsAssembler: {countEl: transistorsAssemblerCountElement, priceEl: transistorsAssemblerPriceElement}
 }
 
 const resourceUi = {
     silicon: {countEl: siliconCountElement, perSecEl: siliconPerSecElement},
     wafers: {countEl: wafersCountElement, perSecEl: wafersPerSecElement},
-    chips: {countEl: chipsCountElement},
-    transistors: {countEl: transistorCountElement},
+    chips: {countEl: chipsCountElement, perSecEl: chipsPerSecElement},
+    transistors: {countEl: transistorCountElement, perSecEl: transistorsPerSecElement},
     money: {countEl: moneyCountElement}
 }
 
@@ -262,6 +286,13 @@ buySiliconHarvesterElement.addEventListener("click", function() {
 
 buyWafersFabricatorElement.addEventListener("click", function() {
     buyBuilding("wafersFabricator");
+})
+buyChipsAssemblerElement.addEventListener("click", function() {
+    buyBuilding("chipsAssembler");
+})
+
+buyTransistorsAssemblerElement.addEventListener("click", function() {
+    buyBuilding("transistorsAssembler");
 })
 
 craftWaferElement.addEventListener("click", function() {
