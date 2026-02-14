@@ -2,6 +2,11 @@
 let siliconCountElement = document.getElementById("siliconCount");
 let siliconPerSecElement = document.getElementById("siliconPerSec");
 let mineSiliconElement = document.getElementById("mineSilicon");
+let wafersCountElement = document.getElementById("wafersCount");
+let chipsCountElement = document.getElementById("chipCount");
+//crafting
+let craftWaferElement = document.getElementById("craftWafer");
+let craftChipElement = document.getElementById("craftChip");
 //auto miner
 let buyAutoMinerElement = document.getElementById("buyAutoMiner");
 let autoMinerPriceElement = document.getElementById("autoMinerPrice");
@@ -10,6 +15,19 @@ let autoMinerCountElement = document.getElementById("autoMinerCount");
 let buySiliconHarvesterElement = document.getElementById("buySiliconHarvester");
 let siliconHarvesterPriceElement = document.getElementById("siliconHarvesterPrice");
 let siliconHarvesterCountElement = document.getElementById("siliconHarvesterCount");
+
+const recipes = {
+    wafer: {
+        name: "Wafer",
+        input: {silicon: 15},
+        output: {wafers: 1}
+    },
+    chip: {
+        name: "Chip",
+        input: {wafers: 5},
+        output: {chips: 1}
+    }
+}
 
 const buildings = {
     autoMiner: {
@@ -27,8 +45,8 @@ const buildings = {
 }
 
 const ui = {
-    autoMiner: {countEl: autoMinerCountElement.textContent, priceEl: autoMinerPriceElement.textContent},
-    siliconHarvester: {countEl: siliconCountElement.textContent, priceEl: siliconHarvesterPriceElement.textContent}
+    autoMiner: {countEl: autoMinerCountElement, priceEl: autoMinerPriceElement},
+    siliconHarvester: {countEl: siliconHarvesterCountElement, priceEl: siliconHarvesterPriceElement}
 }
 
 let resources = {
@@ -73,10 +91,37 @@ function buildingtick() {
 function guiTick() {
     siliconCountElement.textContent = Math.floor(resources.silicon);
     siliconPerSecElement.textContent = getSiliconPerSecond();
+    wafersCountElement.textContent = Math.floor(resources.wafers);
+    chipsCountElement.textContent = Math.floor(resources.chips);
 
     for (let key in ui) {
-        ui[key].countEl = buildings[key].owned;
-        ui[key].priceEl = getBuildingCost(key);
+        ui[key].countEl.textContent = buildings[key].owned;
+        ui[key].priceEl.textContent = getBuildingCost(key);
+    }
+}
+
+//crafting
+function canCraft(recipeKey) {
+    let recipe = recipes[recipeKey];
+    for (const resource in recipe.input) {
+        if (recipe.input[resource] > (resources[resource]||0)) {
+            return false;
+        }
+        
+        
+    }
+    return true;
+}
+
+function craft(recipeKey) {
+    let recipe = recipes[recipeKey];
+    if (canCraft(recipeKey)) {
+        for (const resource in recipe.input) {
+            resources[resource] -= recipe.input[resource];
+        }
+        for (const resource in recipe.output) {
+            resources[resource] = (resources[resource] || 0) + recipe.output[resource];
+        }
     }
 }
 
@@ -91,6 +136,14 @@ buyAutoMinerElement.addEventListener("click", function() {
 
 buySiliconHarvesterElement.addEventListener("click", function() {
     buyBuilding("siliconHarvester");
+})
+
+craftWaferElement.addEventListener("click", function() {
+    craft("wafer");
+})
+
+craftChipElement.addEventListener("click", function() {
+    craft("chip");
 })
 
 //saving
