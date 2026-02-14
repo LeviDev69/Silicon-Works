@@ -4,6 +4,17 @@ let siliconPerSecElement = document.getElementById("siliconPerSec");
 let mineSiliconElement = document.getElementById("mineSilicon");
 let wafersCountElement = document.getElementById("wafersCount");
 let chipsCountElement = document.getElementById("chipCount");
+let moneyCountElement = document.getElementById("moneyCount");
+//selling
+let sellOneSiliconElement = document.getElementById("sellOneSilicon");
+let sellTenSiliconElement = document.getElementById("sellTenSilicon");
+let sellOneHundredSiliconElement = document.getElementById("sellOneHundredSilicon");
+let sellOneWaferElement = document.getElementById("sellOneWafer");
+let sellTenWaferElement = document.getElementById("sellTenWafer");
+let sellOneHundredWaferElement = document.getElementById("sellOneHundredWafer");
+let sellOneChipElement = document.getElementById("sellOneChip");
+let sellTenChipElement = document.getElementById("sellTenChip");
+let sellOneHundredChipElement = document.getElementById("sellOneHundredChip");
 //crafting
 let craftWaferElement = document.getElementById("craftWafer");
 let craftChipElement = document.getElementById("craftChip");
@@ -15,6 +26,12 @@ let autoMinerCountElement = document.getElementById("autoMinerCount");
 let buySiliconHarvesterElement = document.getElementById("buySiliconHarvester");
 let siliconHarvesterPriceElement = document.getElementById("siliconHarvesterPrice");
 let siliconHarvesterCountElement = document.getElementById("siliconHarvesterCount");
+
+const itemPrices = {
+    silicon: 1,
+    wafers: 20,
+    chips: 150
+}
 
 const recipes = {
     wafer: {
@@ -44,9 +61,16 @@ const buildings = {
     }
 }
 
-const ui = {
+const buildingUi = {
     autoMiner: {countEl: autoMinerCountElement, priceEl: autoMinerPriceElement},
     siliconHarvester: {countEl: siliconHarvesterCountElement, priceEl: siliconHarvesterPriceElement}
+}
+
+const resourceUi = {
+    silicon: {countEl: siliconCountElement},
+    wafers: {countEl: wafersCountElement},
+    chips: {countEl: chipsCountElement},
+    money: {countEl: moneyCountElement}
 }
 
 let resources = {
@@ -78,8 +102,8 @@ function getBuildingCost(key) {
 
 function buyBuilding(key) {
     let buildingCost = getBuildingCost(key);
-    if (resources.silicon >= buildingCost) {
-        resources.silicon -= buildingCost;
+    if (resources.money >= buildingCost) {
+        resources.money -= buildingCost;
         buildings[key].owned++;
     }
 }
@@ -89,14 +113,22 @@ function buildingtick() {
 }
 
 function guiTick() {
-    siliconCountElement.textContent = Math.floor(resources.silicon);
     siliconPerSecElement.textContent = getSiliconPerSecond();
-    wafersCountElement.textContent = Math.floor(resources.wafers);
-    chipsCountElement.textContent = Math.floor(resources.chips);
+    
+    for (let key in resourceUi) {
+        resourceUi[key].countEl.textContent = Math.floor(resources[key]);
+    }
 
-    for (let key in ui) {
-        ui[key].countEl.textContent = buildings[key].owned;
-        ui[key].priceEl.textContent = getBuildingCost(key);
+    for (let key in buildingUi) {
+        buildingUi[key].countEl.textContent = buildings[key].owned;
+        buildingUi[key].priceEl.textContent = getBuildingCost(key);
+    }
+}
+
+function sell(key, amount) {
+    if ((resources[key] || 0) >= amount) {
+        resources[key] -= amount;
+        resources.money += (itemPrices[key]*amount);
     }
 }
 
@@ -145,6 +177,43 @@ craftWaferElement.addEventListener("click", function() {
 craftChipElement.addEventListener("click", function() {
     craft("chip");
 })
+
+sellOneSiliconElement.addEventListener("click", function() {
+    sell("silicon", 1)
+})
+
+sellTenSiliconElement.addEventListener("click", function() {
+    sell("silicon", 10)
+})
+
+sellOneHundredSiliconElement.addEventListener("click", function() {
+    sell("silicon", 100)
+})
+
+sellOneWaferElement.addEventListener("click", function() {
+    sell("wafers", 1)
+})
+
+sellTenWaferElement.addEventListener("click", function() {
+    sell("wafers", 10)
+})
+
+sellOneHundredWaferElement.addEventListener("click", function() {
+    sell("wafers", 100)
+})
+
+sellOneChipElement.addEventListener("click", function() {
+    sell("chips", 1)
+})
+
+sellTenChipElement.addEventListener("click", function() {
+    sell("chips", 10)
+})
+
+sellOneHundredChipElement.addEventListener("click", function() {
+    sell("chips", 100)
+})
+
 
 //saving
 const SAVE_KEY = "siliconWorksSave_v1"

@@ -5,19 +5,56 @@
 </head>
 <body>
     <h1>Silicon Works</h1>
-    <p>Silicon: <span id="siliconCount">0</span>    Wafers: <span id="wafersCount">0</span>    Chips: <span id="chipCount">0</span></p>
+    
+    <div>
+    <h2>Inventory</h2>
+    <p>Silicon: <span id="siliconCount">0</span>    Wafers: <span id="wafersCount">0</span>    Chips: <span id="chipCount">0</span>     Money: <span id="moneyCount">0</span></p>
     <p>Silicon/sec: <span id="siliconPerSec">0</span></p>
     <button id="mineSilicon">Mine Silicon</button>
-    <h2>Shop</h2>
-    <button id="buyAutoMiner">
-        Buy auto miner (<span id="autoMinerPrice">10</span>) have:<span id="autoMinerCount">0</span>
-    </button>
-    <button id="buySiliconHarvester">
-        Buy Silicon Harvester (<span id="siliconHarvesterPrice">100</span>) have:<span id="siliconHarvesterCount">0</span>
-    </button>
-    <h2>Crafting</h2>
-    <button id="craftWafer">Make 1 Wafer (15 silicon)</button>
-    <button id="craftChip">Make 1 Chip (5 Wafers)</button>
+    </div>
+
+    <div>
+        <h2>Shop</h2>
+        <button id="buyAutoMiner">
+            Buy auto miner ($<span id="autoMinerPrice">10</span>) have:<span id="autoMinerCount">0</span>
+        </button>
+        <button id="buySiliconHarvester">
+            Buy Silicon Harvester ($<span id="siliconHarvesterPrice">100</span>) have:<span id="siliconHarvesterCount">0</span>
+        </button>
+    </div>
+
+    <div>
+        <h2>Sell</h2>
+            
+        <div>
+            <p>Silicon:</p>
+            <button id="sellOneSilicon">sell 1 ($1)</button>
+            <button id="sellTenSilicon">sell 10 ($10)</button>
+            <button id="sellOneHundredSilicon">sell 100 ($100)</button>
+        </div>
+
+        <div>
+            <p>Wafers:</p>
+            <button id="sellOneWafer">sell 1 ($20)</button>
+            <button id="sellTenWafer">sell 10 ($200)</button>
+            <button id="sellOneHundredWafer">sell 100 ($2,000)</button>
+        </div>
+
+        <div>
+            <p>Chips</p>
+            <button id="sellOneChip">sell 1 ($150)</button>
+            <button id="sellTenChip">sell 10 ($1,500)</button>
+            <button id="sellOneHundredChip">sell 100 ($150,00)</button>
+        </div>
+
+    </div>
+    
+    
+    <div>
+        <h2>Crafting</h2>
+        <button id="craftWafer">Make 1 Wafer (15 silicon)</button>
+        <button id="craftChip">Make 1 Chip (5 Wafers)</button>
+    </div>
 
     <script src="game.js"></script>
 </body>
