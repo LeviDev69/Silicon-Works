@@ -170,7 +170,7 @@ function getBuildingCost(key) {
 
 function getBuildingSellPrice(key) {
     if ((buildings[key].owned || 0) > 0) {
-        return Math.floor(buildings[key].baseCost * (buildings[key].costScale ** (buildings[key].owned -1)));
+        return Math.floor(0.5*(buildings[key].baseCost * (buildings[key].costScale ** (buildings[key].owned -1))));
     } else return 0;
     
 }
@@ -235,7 +235,7 @@ function guiTick() {
     for (let key in buildingUi) {
         buildingUi[key].countEl.textContent = buildings[key].owned;
         if (sellMode) {
-            buildingUi[key].priceEl.textContent = Math.floor(getBuildingCost(key) * 0.5)
+            buildingUi[key].priceEl.textContent = getBuildingSellPrice(key);
         } else {
             buildingUi[key].priceEl.textContent = getBuildingCost(key);
         }
