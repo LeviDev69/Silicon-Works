@@ -76,7 +76,9 @@ button:active {
 button[id^="buy"],
 button[id^="sellOne"],
 button[id^="sellTen"],
-button[id^="sellOneHundred"] {
+button[id^="sellOneHundred"],
+button[id^="sellAll"]
+    {
     width: 100%;
     text-align: left;
     margin-top: 10px;
@@ -144,4 +146,14 @@ button[id^="sellOneHundred"] {
 p {
     margin: 8px 0;
     color: #cfd6ea;
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    filter: grayscale();
+}
+
+button:enabled {
+    opacity: 1;
 }
