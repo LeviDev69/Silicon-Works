@@ -114,19 +114,19 @@ const buildings = {
     },
     wafersFabricator: {
         owned: 0,
-        baseCost: 600,
+        baseCost: 1000,
         costScale: 1.20,
         production: {input: {silicon: 15}, output: {wafers: 1}}
     },
     chipsAssembler: {
         owned: 0,
-        baseCost: 4000,
+        baseCost: 20000,
         costScale: 1.20,
         production: {input: {wafers: 5}, output: {chips: 1}}
     },
     transistorsAssembler: {
         owned: 0,
-        baseCost: 20000,
+        baseCost: 100000,
         costScale: 1.17,
         production: {input: {chips: 5, silicon: 10}, output: {transistors: 1}}
     }
