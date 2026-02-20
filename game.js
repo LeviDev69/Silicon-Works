@@ -78,7 +78,7 @@ const itemPrices = {
     silicon: 1,
     wafers: 20,
     chips: 150,
-    transistors: 1000
+    transistors: 1500
 }
 
 const recipes = {
