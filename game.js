@@ -62,11 +62,6 @@ let buildingElements = {
         priceEl: document.getElementById("wafersFabricatorPrice"),
         countEl: document.getElementById("wafersFabricatorCount")
     },
-    czFurnace: {
-        buyEl: document.getElementById("buyCzFurnace"),
-        priceEl: document.getElementById("czFurnacePrice"),
-        countEl: document.getElementById("czFurnaceCount")
-    },
     chipsAssembler: {
         buyEl: document.getElementById("buyChipsAssembler"),
         priceEl: document.getElementById("chipsAssemblerPrice"),
@@ -122,12 +117,6 @@ const buildings = {
         baseCost: 10000,
         costScale: 1.20,
         production: {input: {silicon: 15}, output: {wafers: 1}}
-    },
-    czFurnace: {
-        owned: 0,
-        baseCost: 75000,
-        costScale: 1.20,
-        production: {input(silicon: 75), output: {wafers: 5}}
     },
     chipsAssembler: {
         owned: 0,
@@ -418,10 +407,6 @@ buildingElements.siliconHarvester.buyEl.addEventListener("click", function() {
 buildingElements.wafersFabricator.buyEl.addEventListener("click", function() {
     buyButton("wafersFabricator");
 })
-buidingElements.czFurnace.buyEl.addEventListener("click", function() {
-    buyButton("czFurnace");
-})
-
 buildingElements.chipsAssembler.buyEl.addEventListener("click", function() {
     buyButton("chipsAssembler");
 })
