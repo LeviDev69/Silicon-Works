@@ -109,25 +109,25 @@ const buildings = {
     siliconHarvester: {
         owned: 0,
         baseCost: 100,
-        costScale: 1.10,
+        costScale: 1.13,
         production: {output: {silicon: 5}}
     },
     wafersFabricator: {
         owned: 0,
         baseCost: 10000,
-        costScale: 1.15,
+        costScale: 1.20,
         production: {input: {silicon: 15}, output: {wafers: 1}}
     },
     chipsAssembler: {
         owned: 0,
         baseCost: 50000,
-        costScale: 1.20,
+        costScale: 1.25,
         production: {input: {wafers: 5}, output: {chips: 1}}
     },
     transistorsAssembler: {
         owned: 0,
         baseCost: 500000,
-        costScale: 1.17,
+        costScale: 1.27,
         production: {input: {chips: 5, silicon: 10}, output: {transistors: 1}}
     }
 }
