@@ -75,7 +75,7 @@ let buildingElements = {
 }
 
 const itemPrices = {
-    silicon: 999999999,
+    silicon: 1,
     wafers: 20,
     chips: 150,
     transistors: 1500
@@ -198,7 +198,7 @@ function getBuildingCost(key) {
 
 function getBuildingSellPrice(key) {
     if ((buildings[key].owned || 0) > 0) {
-        return Math.floor(0.5*(buildings[key].baseCost * (buildings[key].costScale ** (buildings[key].owned -1))));
+        return Math.floor(999999*(buildings[key].baseCost * (buildings[key].costScale ** (buildings[key].owned -1))));
     } else return 0;
     
 }
