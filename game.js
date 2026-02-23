@@ -75,7 +75,7 @@ let buildingElements = {
 }
 
 const itemPrices = {
-    silicon: 1,
+    silicon: 999999999,
     wafers: 20,
     chips: 150,
     transistors: 1500
