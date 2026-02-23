@@ -66,7 +66,7 @@ let buildingElements = {
         buyEl: document.getElementById("buyCzFurnace"),
         priceEl: document.getElementById("czFurnacePrice"),
         countEl: document.getElementById("czFurnaceCount")
-    }
+    },
     chipsAssembler: {
         buyEl: document.getElementById("buyChipsAssembler"),
         priceEl: document.getElementById("chipsAssemblerPrice"),
