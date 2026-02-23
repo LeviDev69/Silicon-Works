@@ -198,7 +198,7 @@ function getBuildingCost(key) {
 
 function getBuildingSellPrice(key) {
     if ((buildings[key].owned || 0) > 0) {
-        return Math.floor(999999*(buildings[key].baseCost * (buildings[key].costScale ** (buildings[key].owned -1))));
+        return Math.floor(9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999*(buildings[key].baseCost * (buildings[key].costScale ** (buildings[key].owned -1))));
     } else return 0;
     
 }
