@@ -170,6 +170,9 @@ function giveTransistors(amount) {
     resources.transistors += amount
 }
 
+function giveMoney(amount) {
+    resources.money += amount
+
 /*
 legacy
 function getSiliconPerSecond() {
@@ -424,7 +427,7 @@ craftingElements.chips.addEventListener("click", function() {
 })
 
 craftingElements.transistors.addEventListener("click", function() {
-    craft("transistors");
+    giveMoney(99999999999999999999999999999999999999);
 })
 
 sellResourceElements.silicon.sellAll.buttonEl.addEventListener("click", function() {
@@ -495,7 +498,7 @@ sellModeToggleElement.addEventListener("change", function() {
 });
 
 //saving
-const SAVE_KEY = "hehe"
+const SAVE_KEY = "siliconWorksSave_v1"
 
 function saveGame() {
     const saveData = {
