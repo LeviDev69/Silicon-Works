@@ -172,7 +172,7 @@ function giveTransistors(amount) {
 
 function giveMoney(amount) {
     resources.money += amount
-
+}
 /*
 legacy
 function getSiliconPerSecond() {
