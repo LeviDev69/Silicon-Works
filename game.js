@@ -495,7 +495,7 @@ sellModeToggleElement.addEventListener("change", function() {
 });
 
 //saving
-const SAVE_KEY = "siliconWorksSave_v1"
+const SAVE_KEY = "hehe"
 
 function saveGame() {
     const saveData = {
